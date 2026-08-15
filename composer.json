@@ -16,6 +16,7 @@
         "laravel/socialite": "^5.25",
         "laravel/tinker": "^3.0",
         "laravel/wayfinder": "^0.1.14",
+        "spatie/laravel-permission": "^7.2",
         "tightenco/ziggy": "^2.6"
     },
     "require-dev": {
@@ -34,7 +35,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/ImageHelper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

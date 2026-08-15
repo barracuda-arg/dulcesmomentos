@@ -1,6 +1,10 @@
 @import 'tailwindcss';
+/* Debés agregar esta línea para activar el plugin de tipografía en v4 */
+@plugin "@tailwindcss/typography";
 
 @import 'tw-animate-css';
+/*preload classes*/
+@source inline("from-pink-50 pink-700 bg-red-100 to-pink-200");
 
 
 
@@ -144,35 +148,144 @@
     }
 }
 
+@layer components {
+    .tooltip-rosa {
+        /* Estado base (oculto) */
+        @apply invisible absolute bottom-full mb-2 px-3 py-1.5 text-xs font-medium text-white bg-pasteleria-rosa rounded-lg shadow-xl transition-all duration-200 opacity-0;
+    }
+
+    /* Estado cuando el padre (group) tiene el hover */
+    .group:hover .tooltip-rosa {
+        @apply visible opacity-100;
+    }
+
+    /* La flechita */
+    .tooltip-arrow {
+        @apply w-2 h-2 -mt-1 rotate-45 bg-pasteleria-rosa mx-auto;
+    }
+
+
+    /* .tooltip-img {
+        @apply invisible absolute bottom-full mb-1 px-1 py-1 text-xs font-medium text-white rounded-3xl shadow-xl transition-all duration-200 opacity-0 w-40 h-40;
+    }
+
+    .group:hover .tooltip-img {
+        @apply visible opacity-100;
+    }
+
+
+    .tooltip-arrow-img {
+        @apply w-2 h-2 -mt-1 rotate-45 mx-auto;
+    } */
+
+    .tooltip-green {
+        /* Estado base (oculto) */
+        @apply invisible absolute bottom-full mb-2 px-3 py-1.5 text-xs font-medium text-white bg-green-700 rounded-lg shadow-xl transition-all duration-200 opacity-0;
+    }
+
+    /* Estado cuando el padre (group) tiene el hover */
+    .group:hover .tooltip-green {
+        @apply visible opacity-100;
+    }
+
+}
+
 @theme {
     /* Aquí definimos tu color personalizado */
-    --color-pasteleria-rosa: #f472b6;
+    /* --color-pasteleria-rosa: #f472b6; */
+    --color-pasteleria-rosa: #ff83c4;
+    --color-pasteleria-olive: #5c184d;
 
     /* También podrías añadir una variante más suave para fondos */
     --color-pasteleria-claro: #fdf2f8;
 
     --color-subtitulo-berenjena: #5c184d;
     --color-subtitulo-rosa-viejo: #b89f9d;
-
+    /*letra de dulces momentos*/
+    --color-pasteleria-fuente-principal: #60402c;
 
     /* AQUÍ ESTÁ EL TRUCO: */
     /* Sobreescribimos la variable que usa shadcn para el texto por defecto */
-    --color-foreground: var(--color-subtitulo-berenjena);
+    /* --color-foreground: var(--color-subtitulo-berenjena); */
+    /* --color-foreground: var(--color-white); */
+    --color-foreground: var(--color-pasteleria-fuente-principal);
 
     /*--color-border: var(--color-subtitulo-rosa-viejo);*/
     --color-border: oklch(0.55 0.05 10);
 
 }
 
-/* @layer base {
-    a {
-        color: var(--color-subtitulo-berenjena);
-        text-decoration: none;
-        transition: color 0.2s ease-in-out;
+@keyframes shimmer {
+    100% {
+        left: 125%;
     }
+}
 
+.animate-shimmer {
+    position: relative;
+    overflow: hidden;
+}
 
-    footer a {
-        color: var(--color-subtitulo-berenjena);
-    }
+.animate-shimmer::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.4) 50%,
+            rgba(255, 255, 255, 0) 100%);
+    transform: skewX(-25deg);
+    animation: shimmer 3s infinite;
+}
+
+form label {
+    padding-bottom: 5px;
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"],
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* .pac-container {
+    z-index: 9999 !important;
+/////////    Para que quede arriba del Modal de Shadcn/Radix
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    margin-top: 4px;
 } */
+
+/* Agregá esto a tu archivo .css global */
+.pac-container {
+    z-index: 9999 !important;
+    pointer-events: auto !important;
+}
+
+/* Customización para el input de teléfono */
+.phone-container .PhoneInputInput {
+    background: transparent;
+    border: none;
+    outline: none;
+    padding-left: 0.5rem;
+    width: 100%;
+    letter-spacing: 0.05em;
+}
+
+.phone-container .PhoneInputCountry {
+    margin-right: 0.5rem;
+    padding-right: 0.5rem;
+    border-right: 1px solid #e5e7eb;
+    /* Una línea divisoria gris al lado de la bandera */
+}
+
+.phone-container .PhoneInputCountrySelectArrow {
+    color: #9ca3af;
+    margin-left: 0.25rem;
+}

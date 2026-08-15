@@ -17,6 +17,8 @@ trait ProfileValidationRules
         return [
             'name' => $this->nameRules(),
             'email' => $this->emailRules($userId),
+            'phone' => ['nullable', 'string', 'max:50'], // Por si sumaste teléfono
+            'avatar' => ['nullable'], // Permitimos que pase el binario o null para procesarlo en el controlador
         ];
     }
 
@@ -38,7 +40,8 @@ trait ProfileValidationRules
     protected function emailRules(?int $userId = null): array
     {
         return [
-            'required',
+            // 'required',
+            ($userId === null ? 'required' : 'sometimes'), // Si es creación, requerido; si es actualización, a veces
             'string',
             'email',
             'max:255',

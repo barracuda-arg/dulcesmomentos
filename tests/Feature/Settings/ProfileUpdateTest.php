@@ -21,7 +21,7 @@ class ProfileUpdateTest extends TestCase
         $response->assertOk();
     }
 
-    public function test_profile_information_can_be_updated()
+    public function test_profile_information_can_be_updated_without_changing_email()
     {
         $user = User::factory()->create();
 
@@ -29,7 +29,6 @@ class ProfileUpdateTest extends TestCase
             ->actingAs($user)
             ->patch(route('profile.update'), [
                 'name' => 'Test User',
-                'email' => 'test@example.com',
             ]);
 
         $response
@@ -39,11 +38,11 @@ class ProfileUpdateTest extends TestCase
         $user->refresh();
 
         $this->assertSame('Test User', $user->name);
-        $this->assertSame('test@example.com', $user->email);
-        $this->assertNull($user->email_verified_at);
+        $this->assertSame($user->getOriginal('email'), $user->email);
+        $this->assertNotNull($user->email_verified_at);
     }
 
-    public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged()
+    public function test_email_verification_status_is_unchanged_when_profile_is_updated()
     {
         $user = User::factory()->create();
 
@@ -51,7 +50,6 @@ class ProfileUpdateTest extends TestCase
             ->actingAs($user)
             ->patch(route('profile.update'), [
                 'name' => 'Test User',
-                'email' => $user->email,
             ]);
 
         $response

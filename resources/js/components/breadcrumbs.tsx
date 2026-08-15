@@ -27,7 +27,7 @@ export function Breadcrumbs({
                                     <BreadcrumbItem>
                                         {isLast ? (
                                             <BreadcrumbPage>
-                                                {item.title}
+                                                {item.module}
                                             </BreadcrumbPage>
                                         ) : (
                                             <BreadcrumbLink asChild>

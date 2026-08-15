@@ -17,6 +17,8 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        // dd($this->profileRules($this->user()->id)); // Para depuración, ver qué datos llegan
+        // dd($this->user()); // Para depuración, ver qué datos llegan
         return $this->profileRules($this->user()->id);
     }
 }

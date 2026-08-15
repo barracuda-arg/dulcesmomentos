@@ -22,3 +22,29 @@ export type TwoFactorSetupData = {
 export type TwoFactorSecretKey = {
     secretKey: string;
 };
+
+export type PageSection = {
+    id: number;
+    slug: string;
+    title: string;
+};
+
+export interface SharedData {
+    name: string;
+    auth: {
+        user: User | null;
+        role: string | null;
+    };
+    sidebarOpen: boolean;
+    translations: Record<string, string>;
+    site_settings: Record<string, string>;
+    flash: {
+        success: string | null;
+        error: string | null;
+    };
+    sections?: PageSection[]; // <-- add this
+    [key: string]: unknown;
+}
+
+// Esto le dice a Inertia que use nuestra interfaz enusePage()
+export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & SharedData;

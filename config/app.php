@@ -106,6 +106,18 @@ return [
         ),
     ],
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Notification configuration variables
+    |--------------------------------------------------------------------------
+    | Notification configuration variables for the application, such as WhatsApp numbers and bot URLs.
+    |
+    | */
+
+    'whatsapp_dulces_momentos' => env('WHATSAPP_DULCES_MOMENTOS', '549387xxxxxxx'),
+    'whatsapp_bot_url' => env('WHATSAPP_BOT_URL', ''),
+
     /*
     |--------------------------------------------------------------------------
     | Maintenance Mode Driver
