@@ -7,6 +7,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use App\Models\CustomAttribute;
 use App\Models\Product;
+use App\Models\HeroSlide;
 use Inertia\Inertia;
 use laravel\Fortify\Features;
 use App\Models\OrderFeedback;
@@ -47,6 +48,11 @@ class HomeController extends Controller
             ->with('defaultOptions.attribute') // Cargamos las opciones por defecto con su atributo para evitar N+1
             ->latest()
             ->get();
+        $heroSlides = HeroSlide::orderBy('order_position')->get();
+
+        // dd($heroSlides->toArray());
+
+
 
         return Inertia::render('welcome', [
             // Pasamos las constantes de configuración que ya tenías
@@ -63,7 +69,8 @@ class HomeController extends Controller
             'products' => $products, // ProductResource::collection($products),
 
             'dailyTemptations' => $dailyTemptations,
-            'approvedFeedbacks' => $dbFeedbacks
+            'approvedFeedbacks' => $dbFeedbacks,
+            'heroSlides' => $heroSlides,
         ]);
     }
 

@@ -289,6 +289,6 @@ return [
         'delivery_date' => 'Fecha de Entrega',
         'max_distance_km' => 'Distancia máxima (km)',
         'date_part' => 'Fecha',
-        'time_part' => 'Hora'
+        'time_part' => 'Hora',
     ],
 ];

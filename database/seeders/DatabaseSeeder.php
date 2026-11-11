@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             CustomOptionsSeeder::class,
             PostSeeder::class,
             InitialContentSeeder::class,
+            HeroSlideSeeder::class,
         ]);
     }
 }

@@ -72,6 +72,7 @@ Route::get('/nuestra-historia', HistoriaController::class)->name('nuestra-histor
 Route::get('/contacto', [ContactoController::class, 'show'])->name('contacto');
 Route::post('/contacto', [ContactoController::class, 'sendContactEmail'])->name('contacto.send');
 
+
 /*
 |--------------------------------------------------------------------------
 | Módulo Cliente Autenticado ("Mi Panel" / Historial de Pedidos)
@@ -146,6 +147,12 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/configuracion', [SiteSettingController::class, 'index'])->name('settings.index');
         Route::post('/configuracion/secciones/{section}', [SiteSettingController::class, 'updateSection'])->name('settings.sections.update');
         Route::post('/configuracion/generales', [SiteSettingController::class, 'updateSettings'])->name('settings.generales.update');
+
+
+        Route::post('/configuracion/slider', [SiteSettingController::class, 'storeSlide'])->name('settings.slider.store');
+        Route::delete('/configuracion/slider/{slide}', [SiteSettingController::class, 'destroySlide'])->name('settings.slider.destroy');
+        Route::post('/configuracion/slider/reset', [SiteSettingController::class, 'resetSlider'])->name('settings.slider.reset');
+
     });
 
 /*

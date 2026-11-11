@@ -5,16 +5,21 @@ import Autoplay from 'embla-carousel-autoplay'
 // 👇 AGREGÁ ESTA LÍNEA 👇
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-const images = [
-    '/images/hero/11.jpg',
-    '/images/hero/12.jpg',
-    '/images/hero/13.jpg',
-    '/images/hero/14.jpg',
-    '/images/hero/15.jpg',
-    '/images/hero/15.png',
-];
 
-export default function HeroSlider() {
+
+export default function HeroSlider({ slides }: { slides: any[] }) {
+
+    console.log('Slides recibidos en HeroSlider:', slides);
+
+    // const images = [
+    //     '/images/hero/11.jpg',
+    //     '/images/hero/12.jpg',
+    //     '/images/hero/13.jpg',
+    //     '/images/hero/14.jpg',
+    //     '/images/hero/15.jpg',
+    // ];
+
+    const images = slides.map(slide => slide.image_url);
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
         Autoplay({ delay: 5000, stopOnInteraction: false })
     ]);

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Head, useForm } from '@inertiajs/react';
+import { router, Head, useForm } from '@inertiajs/react';
 // import AdminLayout from '@/layouts/admin-layout'; // Tu layout de administración
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Save, LayoutTemplate, Store, Image as ImageIcon, Globe } from 'lucide-react';
+import { Save, LayoutTemplate, Store, Image as ImageIcon, Globe, Images, Plus, Trash2, RotateCcw } from 'lucide-react';
 import { toast } from 'sonner'; // O el sistema de alertas que uses
 import { getImagePath } from '@/utils/formatters';
 
@@ -23,6 +23,13 @@ interface Section {
     image_url: string | null;
 }
 
+interface Slide {
+    id: number;
+    title: string | null;
+    image_url: string;
+    order: number;
+}
+
 interface Props {
     sections: Section[];
     settings: {
@@ -36,9 +43,10 @@ interface Props {
         facebook_profile: string;
         texto_pie_de_pagina: string;
     };
+    slides: Slide[];
 }
 
-export default function SiteIndex({ sections, settings }: Props) {
+export default function SiteIndex({ sections, settings, slides }: Props) {
 
     const breadcrumbs = [
         {
@@ -110,6 +118,38 @@ export default function SiteIndex({ sections, settings }: Props) {
             onSuccess: () => toast.success(`Sección ${selectedSection.title} actualizada con éxito.`),
         });
     };
+    // Formulario para agregar una nueva imagen al slider
+    const newSlideForm = useForm({
+        title: '',
+        image: null as File | null,
+    });
+
+    const submitNewSlide = (e: React.FormEvent) => {
+        e.preventDefault();
+        newSlideForm.post(route('admin.settings.slider.store'), {
+            forceFormData: true,
+            onSuccess: () => {
+                toast.success('Imagen agregada al slider.');
+                newSlideForm.reset();
+            },
+        });
+    };
+
+    const deleteSlide = (id: number) => {
+        if (confirm('¿Estás seguro de eliminar esta imagen del slider?')) {
+            router.delete(route('admin.settings.slider.destroy', id), {
+                onSuccess: () => toast.success('Imagen eliminada.'),
+            });
+        }
+    };
+
+    const resetSlider = () => {
+        if (confirm('¿Restaurar las imágenes por defecto del slider? Se borrarán las actuales.')) {
+            router.post(route('admin.settings.slider.reset'), {
+                onSuccess: () => toast.success('Slider restaurado por defecto.'),
+            });
+        }
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -128,12 +168,15 @@ export default function SiteIndex({ sections, settings }: Props) {
                     </div> */}
 
                     <Tabs defaultValue="general" className="w-full">
-                        <TabsList className="grid w-full grid-cols-2 max-w-md">
+                        <TabsList className="grid w-full grid-cols-3 max-w-md">
                             <TabsTrigger value="general" className="flex items-center gap-2">
                                 <Store size={16} /> Datos del Negocio
                             </TabsTrigger>
                             <TabsTrigger value="sections" className="flex items-center gap-2">
                                 <LayoutTemplate size={16} /> Secciones del Sitio
+                            </TabsTrigger>
+                            <TabsTrigger value="slider" className="flex items-center gap-2">
+                                <Images size={16} /> Slider Hero
                             </TabsTrigger>
                         </TabsList>
 
@@ -351,6 +394,96 @@ export default function SiteIndex({ sections, settings }: Props) {
                                     </Card>
                                 </div>
                             </div>
+                        </TabsContent>
+
+                        {/* --- PESTAÑA 3: SLIDER HERO --- */}
+                        <TabsContent value="slider" className="mt-4 space-y-6">
+                            <Card>
+                                <CardHeader className="flex flex-row items-center justify-between">
+                                    <div>
+                                        <CardTitle className="text-base font-bold">Imágenes del Banner Principal (Hero)</CardTitle>
+                                        <CardDescription>
+                                            Subí las fotos que se mostrarán en el carrusel de la página de inicio.
+                                        </CardDescription>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={resetSlider}
+                                        className="text-xs font-bold text-gray-500 hover:text-pink-600 flex items-center gap-1.5 px-3 py-2 rounded-xl border border-gray-200 hover:border-pink-200 transition-colors cursor-pointer"
+                                    >
+                                        <RotateCcw size={14} /> Restaurar por Defecto
+                                    </button>
+                                </CardHeader>
+                                <CardContent className="space-y-6">
+                                    {/* Formulario de Subida Rápida */}
+                                    <form onSubmit={submitNewSlide} className="bg-gray-50 p-4 rounded-2xl border border-gray-100 flex flex-col md:flex-row gap-4 items-end">
+                                        <div className="flex-1 space-y-1 w-full">
+                                            <label className="text-xs font-bold uppercase text-gray-500">Título Opcional</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Ej: Tortas para Cumpleaños"
+                                                value={newSlideForm.data.title}
+                                                onChange={e => newSlideForm.setData('title', e.target.value)}
+                                                className="w-full h-10 px-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-pink-500"
+                                            />
+                                        </div>
+                                        <div className="flex-1 space-y-1 w-full">
+                                            <label className="text-xs font-bold uppercase text-gray-500">Seleccionar Imagen</label>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={e => newSlideForm.setData('image', e.target.files?.[0] || null)}
+                                                className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100 cursor-pointer"
+                                                required
+                                            />
+                                        </div>
+                                        <button
+                                            type="submit"
+                                            disabled={newSlideForm.processing}
+                                            className="h-10 bg-pink-500 hover:bg-pink-600 text-white font-bold px-5 rounded-xl text-sm flex items-center gap-2 transition-colors cursor-pointer disabled:opacity-50"
+                                        >
+                                            <Plus size={16} /> Cargar Imagen
+                                        </button>
+                                    </form>
+
+                                    {/* Grilla de Imágenes Activas */}
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                        {slides.map((slide) => (
+                                            <div key={slide.id} className="relative group bg-gray-900 rounded-2xl overflow-hidden border border-gray-200 aspect-video">
+                                                <img
+                                                    src={slide.image_url}
+                                                    alt={slide.title || 'Slide'}
+                                                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-3 flex flex-col justify-between">
+                                                    <span className="self-start text-[10px] font-black uppercase tracking-wider bg-white/90 text-gray-900 px-2 py-0.5 rounded-md">
+                                                        Posición #{slide.order}
+                                                    </span>
+                                                    <div className="flex items-center justify-between">
+                                                        <p className="text-xs font-bold text-white truncate max-w-[150px]">
+                                                            {slide.title || 'Sin título'}
+                                                        </p>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => deleteSlide(slide.id)}
+                                                            className="p-2 bg-red-500/80 hover:bg-red-600 text-white rounded-xl transition-colors cursor-pointer"
+                                                            title="Eliminar"
+                                                        >
+                                                            <Trash2 size={14} />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                        {slides.length === 0 && (
+                                            <div className="col-span-full text-center py-12 text-gray-400 text-sm">
+                                                No hay imágenes cargadas en el slider.
+                                            </div>
+                                        )}
+                                    </div>
+                                </CardContent>
+                            </Card>
                         </TabsContent>
                     </Tabs>
                 </div>

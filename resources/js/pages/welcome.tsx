@@ -10,7 +10,7 @@ import { TestimonialsGrid } from './testimonials-grid';
 import { TestimonialsSection } from './testimonials-bubbles';
 
 
-export default function Welcome({ products, categories, canRegister, dailyTemptations, approvedFeedbacks = [] }: any) {
+export default function Welcome({ products, categories, canRegister, dailyTemptations, approvedFeedbacks = [], heroSlides = [] }: any) {
 
     const testimonials = [
         {
@@ -61,11 +61,11 @@ export default function Welcome({ products, categories, canRegister, dailyTempta
     // Ponemos las reales de la BD primero para que tengan prioridad en la pantalla
     const allTestimonials = [...approvedFeedbacks, ...testimonials];
 
-    console.log('Productos:', products);
+    // console.log('Productos:', products);
     const [selectedCategory, setSelectedCategory] = useState('all');
 
 
-    console.log('=>', products);
+    // console.log('=>', products);
     // Lógica de filtrado en el cliente
     const filteredProducts = selectedCategory === 'all'
         ? products
@@ -94,7 +94,7 @@ export default function Welcome({ products, categories, canRegister, dailyTempta
             <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
 
                 {/* EL SLIDER DE FONDO */}
-                <HeroSlider />
+                <HeroSlider slides={heroSlides} />
 
                 {/* CONTENIDO FIJO ENCIMA */}
                 <div className="container mx-auto px-6 relative z-10 text-center">

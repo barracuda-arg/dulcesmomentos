@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { router } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
+import { BreadcrumbItem } from '@/types/navigation';
 import { Head, useForm } from '@inertiajs/react';
 import { Search, Eye, RefreshCw, Star, Check, X, ExternalLink, Camera, Trash2, Calendar } from 'lucide-react';
 import { ImageZoom } from "../../zoom";
 import Pagination from '@/components/pagination'; // 🌟 Importamos tu nuevo juguete
-import { BreadcrumbItem } from '@/types/navigation';
 import { SectionTitle } from '../section-title';
 // 🌟 Importamos tus componentes estándar de Shadcn
 import {
